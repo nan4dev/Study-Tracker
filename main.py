@@ -1,7 +1,11 @@
+from datetime import date
+
+today = date.today()
+
 subject = input("What did you study? ")
 minutes = input("How many minutes? ")
 
-session = f"{subject} - {minutes} mins\n"
+session = f"{today} | {subject} - {minutes} mins\n"
 
 with open("sessions.txt", "a") as file:
     file.write(session)
@@ -17,7 +21,7 @@ with open("sessions.txt", "r") as file:
         parts = line.split(" - ")
         time_part = parts[1]
 
-        mins = int(time_part.replace(" mins\n", ""))
+        mins = int(time_part.replace(" mins", "").strip())
         total += mins
 
 print(f"\nTotal study time: {total} minutes")
