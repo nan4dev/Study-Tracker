@@ -3,9 +3,10 @@ from datetime import date
 today = date.today()
 
 subject = input("What did you study? ")
+category = input("Category: ")
 minutes = input("How many minutes? ")
 
-session = f"{today} | {subject} - {minutes} mins\n"
+session = f"{today} | {subject} | {category} - {minutes} mins\n"
 
 with open("sessions.txt", "a") as file:
     file.write(session)
@@ -13,15 +14,44 @@ with open("sessions.txt", "a") as file:
 print("\nStudy History:")
 
 total = 0
+session_count = 0
+longest_session = 0
+
+category_totals = {}
 
 with open("sessions.txt", "r") as file:
     for line in file:
         print(line.strip())
 
-        parts = line.split(" - ")
-        time_part = parts[1]
+        parts = line.split(" | ")
+
+        category_part = parts[2]
+        category_name, time_part = category_part.split(" - ")
 
         mins = int(time_part.replace(" mins", "").strip())
+
         total += mins
+        session_count += 1
+
+        if mins > longest_session:
+            longest_session = mins
+
+        if category_name in category_totals:
+            category_totals[category_name] += mins
+        else:
+            category_totals[category_name] = mins
+
+average = total / session_count
 
 print(f"\nTotal study time: {total} minutes")
+
+print(f"Total sessions: {session_count}")
+
+print(f"Average session length: {average:.1f} minutes")
+
+print(f"Longest session: {longest_session} minutes")
+
+print("\nCategory Totals:")
+
+for category, mins in category_totals.items():
+    print(f"{category}: {mins} mins")
